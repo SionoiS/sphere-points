@@ -1,0 +1,13 @@
+[package]
+name = "sphere-points"
+version = "1.0.0"
+authors = ["SionoiS <SionoiS@users.noreply.github.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+name="sphere_points"
+crate-type = ["dylib"]
+
+[dependencies]
