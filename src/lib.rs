@@ -60,7 +60,7 @@ pub fn point_count_3_d(
     }
 
     if latitude_range == 180 {
-        // remove duplicates
+        // remove duplicate poles
         latitude_steps -= 2;
     }
 
