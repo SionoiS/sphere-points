@@ -1,15 +1,18 @@
 # Sphere-Points
 ### Inputs
- - Radius range & resolution in units.
- - Longitudinal range & resolution in degrees.
- - Latitude range & resolution in degrees.
+ - Radius range in arbiraly units.
+ - Radius resolution divide range equaly.
+ - Longitudinal range in radians.
+ - Longitudinal resolution divide range equaly.
+ - Latitude range in radians.
+ - Latitude resolution divide range equaly.
 
 ### Outputs
  - Array of cartesian coordinates.
 
 ### Fonctions
-- Calculate the number of output coordinates for some inputs. (1D, 2D, 3D)
-- Calculate the coordinates for some inputs. (1D, 2D, 3D)
+- Calculate the number of output coordinates for some inputs.
+- Calculate the coordinates for some inputs.
 
 ### How does it works?
 The first point is always at origin. (0.0, 0.0, 0.0)

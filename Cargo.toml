@@ -11,3 +11,4 @@ name="sphere_points"
 crate-type = ["dylib"]
 
 [dependencies]
+rand = "0.7"
