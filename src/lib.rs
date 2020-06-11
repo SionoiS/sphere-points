@@ -279,6 +279,8 @@ mod tests {
     use super::*;
     use rand::distributions::{Distribution, Uniform};
 
+    //TODO test actual output coordinates
+
     #[test]
     fn random_inputs() {
         let mut rng = rand::thread_rng();

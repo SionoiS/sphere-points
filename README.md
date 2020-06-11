@@ -13,7 +13,6 @@
 ### Fonctions
 - Calculate the number of output coordinates for some inputs.
 - Calculate the coordinates for some inputs.
-- Calculate in place an array of pre-allocated coordinates.
 
 ### How does it works?
 The first point is always at origin. (0.0, 0.0, 0.0)
