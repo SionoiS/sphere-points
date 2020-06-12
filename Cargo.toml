@@ -10,5 +10,6 @@ edition = "2018"
 name="sphere_points"
 crate-type = ["dylib"]
 
-[dependencies]
+[dev-dependencies]
 rand = "0.7"
+rand_xoshiro = "0.4"
