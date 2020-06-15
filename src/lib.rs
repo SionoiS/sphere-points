@@ -1,3 +1,4 @@
+use nalgebra::geometry::Point3;
 use std::f32::consts::{FRAC_PI_2, PI};
 
 const TWO_PI: f32 = std::f32::consts::PI * 2.0;
@@ -56,7 +57,8 @@ pub fn calculate_coordinates(
     longitude_resolution: i32,
     latitude_range: f32,
     latitude_resolution: i32,
-) -> Vec<Coordinates> {
+) -> Vec<Point3<f32>> {
+    //TODO process radii_vec, theta_vec, phi_vec in parallel???
     let radii_vec = {
         let step = radius_range / radius_resolution as f32;
 
@@ -139,11 +141,9 @@ pub fn calculate_coordinates(
 
     let mut vec = Vec::with_capacity(1 + radii_vec.len() * phi_vec.len() * theta_vec.len());
 
-    vec.push(Coordinates {
-        x: 0.0,
-        y: 0.0,
-        z: 0.0,
-    });
+    vec.push(Point3::new(0.0, 0.0, 0.0));
+
+    //TODO process every coords in parallel???
 
     for radius in &radii_vec {
         for phi in &phi_vec {
@@ -162,7 +162,7 @@ pub fn calculate_coordinates(
     vec
 }
 
-fn spherical_to_cartesian(radius: f32, theta: f32, phi: f32) -> Coordinates {
+fn spherical_to_cartesian(radius: f32, theta: f32, phi: f32) -> Point3<f32> {
     let (sin_phi, cos_phi) = phi.sin_cos();
     let (sin_theta, cos_theta) = theta.sin_cos();
 
@@ -172,19 +172,11 @@ fn spherical_to_cartesian(radius: f32, theta: f32, phi: f32) -> Coordinates {
 
     // Axis Y and Z switched from math notation to something useable in game.
     // Normally in games Z is forward and Y is up.
-    Coordinates {
-        x: radius * sin_phi * cos_theta,
-        y: radius * cos_phi,
-        z: radius * sin_phi * sin_theta,
-    }
-}
-
-#[repr(C)]
-#[derive(Clone, Debug)]
-pub struct Coordinates {
-    pub x: f32,
-    pub y: f32,
-    pub z: f32,
+    Point3::new(
+        radius * sin_phi * cos_theta,
+        radius * cos_phi,
+        radius * sin_phi * sin_theta,
+    )
 }
 
 #[cfg(test)]
