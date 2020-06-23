@@ -1,14 +1,14 @@
-use nalgebra::geometry::Point3;
-use std::f32::consts::{FRAC_PI_2, PI};
+use nalgebra::Vector3;
+use std::f64::consts::{FRAC_PI_2, PI};
 
-const TWO_PI: f32 = std::f32::consts::PI * 2.0;
+const TWO_PI: f64 = std::f64::consts::PI * 2.0;
 
 /// Calculate the number of coordinates.
 pub fn coordinates_count(
     radius_resolution: i32,
-    longitude_range: f32,
+    longitude_range: f64,
     mut longitude_resolution: i32,
-    latitude_range: f32,
+    latitude_range: f64,
     mut latitude_resolution: i32,
 ) -> i32 {
     if radius_resolution == 0 {
@@ -51,23 +51,23 @@ pub fn coordinates_count(
 }
 
 pub fn calculate_coordinates(
-    radius_range: f32,
+    radius_range: f64,
     radius_resolution: i32,
-    longitude_range: f32,
+    longitude_range: f64,
     longitude_resolution: i32,
-    latitude_range: f32,
+    latitude_range: f64,
     latitude_resolution: i32,
-) -> Vec<Point3<f32>> {
+) -> Vec<Vector3<f64>> {
     //TODO process radii_vec, theta_vec, phi_vec in parallel???
     let radii_vec = {
-        let step = radius_range / radius_resolution as f32;
+        let step = radius_range / radius_resolution as f64;
 
         let count = radius_resolution as usize;
 
         let mut steps = Vec::with_capacity(count);
 
         for i in 1..radius_resolution + 1 {
-            steps.push(step * i as f32);
+            steps.push(step * i as f64);
         }
 
         //println!("radius_steps: {:#?}", steps);
@@ -82,7 +82,7 @@ pub fn calculate_coordinates(
         // skip duplicate meridian if full range
         let skip_last_meridian = (range - TWO_PI).abs() < 0.0001;
 
-        let step = range / longitude_resolution as f32;
+        let step = range / longitude_resolution as f64;
         let offset = range / 2.0;
 
         //println!("step: {}, offset: {}", step, offset);
@@ -97,7 +97,7 @@ pub fn calculate_coordinates(
                 continue;
             }
 
-            steps.push(step * i as f32 - offset);
+            steps.push(step * i as f64 - offset);
         }
 
         //println!("longitude_steps: {:#?}", steps);
@@ -114,7 +114,7 @@ pub fn calculate_coordinates(
         // skip north & south poles if full range
         let skip_poles = (range - PI).abs() < 0.0001;
 
-        let step = range / latitude_resolution as f32;
+        let step = range / latitude_resolution as f64;
         let offset = range / 2.0;
 
         //println!("step: {}, offset: {}", step, offset);
@@ -129,7 +129,7 @@ pub fn calculate_coordinates(
                 continue;
             }
 
-            steps.push(step * i as f32 - offset);
+            steps.push(step * i as f64 - offset);
         }
 
         //println!("latitude_steps: {:#?}", steps);
@@ -141,7 +141,7 @@ pub fn calculate_coordinates(
 
     let mut vec = Vec::with_capacity(1 + radii_vec.len() * phi_vec.len() * theta_vec.len());
 
-    vec.push(Point3::new(0.0, 0.0, 0.0));
+    vec.push(Vector3::new(0.0, 0.0, 0.0));
 
     //TODO process every coords in parallel???
 
@@ -162,7 +162,7 @@ pub fn calculate_coordinates(
     vec
 }
 
-fn spherical_to_cartesian(radius: f32, theta: f32, phi: f32) -> Point3<f32> {
+fn spherical_to_cartesian(radius: f64, theta: f64, phi: f64) -> Vector3<f64> {
     let (sin_phi, cos_phi) = phi.sin_cos();
     let (sin_theta, cos_theta) = theta.sin_cos();
 
@@ -172,7 +172,7 @@ fn spherical_to_cartesian(radius: f32, theta: f32, phi: f32) -> Point3<f32> {
 
     // Axis Y and Z switched from math notation to something useable in game.
     // Normally in games Z is forward and Y is up.
-    Point3::new(
+    Vector3::new(
         radius * sin_phi * cos_theta,
         radius * cos_phi,
         radius * sin_phi * sin_theta,
@@ -185,7 +185,7 @@ mod tests {
     use rand::Rng;
     use rand::SeedableRng;
     use rand_xoshiro::Xoshiro256StarStar;
-    use std::f32::consts::FRAC_PI_8;
+    use std::f64::consts::FRAC_PI_8;
 
     //TODO test actual output coordinates
 
